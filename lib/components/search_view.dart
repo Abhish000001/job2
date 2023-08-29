@@ -1,0 +1,54 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import '../constants.dart';
+
+const OutlineInputBorder outlineInputBorder = OutlineInputBorder(
+  borderRadius: BorderRadius.all(Radius.circular(19)),
+  borderSide: BorderSide.none,
+);
+
+class SearchForm extends StatelessWidget {
+  const SearchForm({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      child: TextFormField(
+        onSaved: (value) {},
+        decoration: InputDecoration(
+          filled: true,
+          fillColor: kSilverColor,
+          hintText: "Search...",
+          border: outlineInputBorder,
+          enabledBorder: outlineInputBorder,
+          focusedBorder: outlineInputBorder,
+          errorBorder: outlineInputBorder,
+          prefixIcon: Padding(
+            padding: const EdgeInsets.all(14),
+            child: SvgPicture.asset("assets/icons/search.svg"),
+          ),
+          suffixIcon: Padding(
+            padding: const EdgeInsets.symmetric(
+                horizontal: 20,vertical: 20),
+            // child: SizedBox(
+            //   width: 48,
+            //   height: 48,
+            //   child: ElevatedButton(
+            //     style: ElevatedButton.styleFrom(
+            //       primary: kSilverColor,
+            //       shape: const RoundedRectangleBorder(
+            //         borderRadius: BorderRadius.all(Radius.circular(12)),
+            //       ),
+            //     ),
+            //     onPressed: () {},
+            //     child: SvgPicture.asset("assets/icons/slider_icon.svg"),
+            //   ),
+            // ),
+          ),
+        ),
+      ),
+    );
+  }
+}

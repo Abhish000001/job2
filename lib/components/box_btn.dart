@@ -1,0 +1,45 @@
+
+import 'package:flutter/material.dart';
+
+import '../constants.dart';
+
+
+
+
+class BoxButton extends StatelessWidget {
+  final String text;
+  final VoidCallback onTap;
+  final bool isloading;
+  
+  const BoxButton({
+    Key? key, 
+    required this.text, 
+    required this.onTap,
+    this.isloading=false
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(defaultBorderRadius),
+      child: Container(
+        height: 56,
+        width: double.infinity,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(defaultBorderRadius),
+          color: primary
+        ),
+        child:isloading?CircularProgressIndicator(color: Colors.white,) :Text(
+          text, 
+          style: TextStyle(
+            color: white, 
+            fontSize: 16, 
+            fontWeight: FontWeight.bold
+          ),
+        ),
+      ),
+    );
+  }
+}
