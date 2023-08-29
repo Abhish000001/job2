@@ -1,16 +1,32 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../../constants.dart';
 import '../../model/job_model.dart';
 import 'detail_item.dart';
-class DetailContent extends StatelessWidget {
+var jobde;
+var savedjo;
+class DetailContent extends StatefulWidget {
   const DetailContent({
     Key? key,
-    required this.data,
+     this.data, this.jobid,
   }) : super(key: key);
 
-  final Job data;
+  final Job? data;
+  final jobid;
 
+  @override
+  State<DetailContent> createState() => _DetailContentState();
+}
+
+class _DetailContentState extends State<DetailContent> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    Jobdes();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Flexible(
@@ -36,13 +52,16 @@ class DetailContent extends StatelessWidget {
                 child: Column(
                   children: [
                     SvgPicture.asset(
-                      data.imgUrl,
+                      // data.imgUrl
+                      Image.network("/assets/images/company/New_Project_(2)1.png") as String,
                       height: 50,
                       width: 50,
                     ),
                     SizedBox(height: kSpacingUnit * 2),
                     Text(
-                      data.companyName,
+                      // data.companyName
+                      jobde["data"]["company_name"]
+                      ,
                       style: kTitleTextStyle,
                     ),
                     SizedBox(height: kSpacingUnit),
@@ -51,7 +70,7 @@ class DetailContent extends StatelessWidget {
                         Icon(Icons.maps_home_work),
                         SizedBox(width: 20,),
                         Text(
-                          data.location,
+                          jobde["data"]["state"],
                           style: kCaptionTextStyle,
                         ),
                       ],
@@ -71,7 +90,7 @@ class DetailContent extends StatelessWidget {
                     ),
                     SizedBox(width: 10,),
                     Text(
-                      'AnnualCTC '+data.ctc,
+                      'AnnualCTC '+jobde["data"]["sallary"],
                       style: kCaptionTextStyle,
                     ),
                   ],
@@ -96,7 +115,7 @@ class DetailContent extends StatelessWidget {
               SizedBox(height: kSpacingUnit * 2),
               Row(mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    
+
                     Text(
                       'Management',
                       style: kCaptionTextStyle,
@@ -117,26 +136,36 @@ class DetailContent extends StatelessWidget {
                 style: kSubTitleTextStyle,
               ),
               SizedBox(height: kSpacingUnit * 2),
-              if (data.responsibilities != null && data.responsibilities.length > 0)
-                ...data.responsibilities
-                    .map((responsibility) => DetailItem(data: responsibility))
-                    .toList(),
-              SizedBox(height: kSpacingUnit),
+              // if (widget.data.responsibilities != null && widget.data.responsibilities.length > 0)
+              //   ...widget.data.responsibilities
+              //       .map((responsibility) => DetailItem(data: responsibility))
+              //       .toList(),
+              // SizedBox(height: kSpacingUnit),
               Text(
                 'Qualifications',
                 style: kSubTitleTextStyle,
               ),
               SizedBox(height: kSpacingUnit * 2),
-              if (data.qualifications != null && data.qualifications.length > 0)
-                ...data.qualifications
-                    .map((qualification) => DetailItem(data: qualification))
-                    .toList(),
-              SizedBox(height: kSpacingUnit * 15),
-              
+              // if (widget.data.qualifications != null && widget.data.qualifications.length > 0)
+              //   ...widget.data.qualifications
+              //       .map((qualification) => DetailItem(data: qualification))
+              //       .toList(),
+              // SizedBox(height: kSpacingUnit * 15),
+
             ],
           ),
         ),
       ),
     );
+  }
+
+  Jobdes() async {
+    print(widget.jobid);
+    final jobd = await http
+        .post(Uri.parse("https://rojgaarr.com/api/job_description"), body: {
+      'job_id':widget.jobid ,
+    });
+    jobde=jsonDecode(jobd.body.toString());
+    print(jobde["data"]);
   }
 }
