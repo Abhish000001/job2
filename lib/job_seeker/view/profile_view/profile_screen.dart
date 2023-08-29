@@ -1,14 +1,17 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:job2/constants.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../components/box_btn.dart';
 import 'edit_profile_details.dart';
 import 'job_status.dart';
 import 'resume_screen.dart';
 import 'setting.dart';
 import 'switch_screen.dart';
-
+var jobde1;
+var isLogedIn;
 class Profile_details extends StatefulWidget {
   const Profile_details({super.key});
 
@@ -17,6 +20,7 @@ class Profile_details extends StatefulWidget {
 }
 
 class _Profile_detailsState extends State<Profile_details> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -90,11 +94,14 @@ class _Profile_detailsState extends State<Profile_details> {
                       children: [
                         Column(
                           children: [
-                            Text(
-                              '110',
-                              style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
-                            ),
+                            FutureBuilder(future: get_tootaljob_view(), builder: (context, snapshot) {
+                              return  Text(
+                                jobde1['view job'].toString(),
+                                style: TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.bold),
+                              );
+                            },),
+
                             SizedBox(
                               height: 20,
                             ),
@@ -253,4 +260,18 @@ class _Profile_detailsState extends State<Profile_details> {
       ),
     );
   }
+
+  get_tootaljob_view() async {
+    var shared_preferences = await SharedPreferences.getInstance();
+    isLogedIn = shared_preferences.getString('id');
+   // print(isLogedIn);
+    final jobd1 = await http
+        .post(Uri.parse("https://rojgaarr.com/api/get_total_view"),
+        body: {
+      'user_id': isLogedIn.toString(),
+    });
+    jobde1 = jsonDecode(jobd1.body.toString());
+    print(jobde1);
+  }
+
 }
